@@ -53,24 +53,24 @@ void LaunchTheGalaxy(float * deviceReal_ascension, float* deviceReal_declination
 		return; 
 	}
 
-	for (int i=0; i < WINDOW; i+=gridDim.x)
+	for (int i=tidX; i < WINDOW; i++)
 	{
-		
-		temp_real_ascension[tidX] = deviceReal_ascension[tidX + i];
-		temp_real_declination[tidX] = deviceReal_declination[tidX + i];
+		if((i * WINDOW + tidX) <= GRID)
+			temp_real_ascension[i] = deviceReal_ascension[i * WINDOW + tidX];
+			temp_real_declination[i] = deviceReal_declination[i * WINDOW + tidX];
 
 
-		__syncthreads();
+		//__syncthreads();
 
-		for (int row = 0; row < WINDOW; row += blockDim.y)
-		{
-			for (int col = 0; col < WINDOW; col += blockDim.x)
-			{
-				tempDD = (acosf(ClampValue(sinf(temp_real_declination[threadIdx.x + col]) * sinf(temp_real_declination[threadIdx.y + row]) + cosf(temp_real_declination[threadIdx.x + col]) * cosf(temp_real_declination[threadIdx.y + row]) * cos(temp_real_ascension[threadIdx.x + col] - temp_real_ascension[threadIdx.y + row]), -1.0f, 1.0f)) * 720.0f / (float)M_PI);
-				atomicAdd(deviceDD + (int)tempDD, 1);
-			}
-		}
-		
+		//for (int row = 0; row < WINDOW; row += blockDim.y)
+		//{
+		//	for (int col = 0; col < WINDOW; col += blockDim.x)
+		//	{
+		//		tempDD = (acosf(ClampValue(sinf(temp_real_declination[threadIdx.x + col]) * sinf(temp_real_declination[threadIdx.y + row]) + cosf(temp_real_declination[threadIdx.x + col]) * cosf(temp_real_declination[threadIdx.y + row]) * cos(temp_real_ascension[threadIdx.x + col] - temp_real_ascension[threadIdx.y + row]), -1.0f, 1.0f)) * 720.0f / (float)M_PI);
+		//		atomicAdd(deviceDD + (int)tempDD, 1);
+		//	}
+		//}
+		//
 	}
 	__syncthreads();
 }
