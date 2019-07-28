@@ -46,47 +46,31 @@ void LaunchTheGalaxy(float * deviceReal_ascension, float* deviceReal_declination
 
 	__shared__ float tempDD; 
 
-	const int tidX = threadIdx.x + threadIdx.x * blockDim.x;
-	const int tidY = blockIdx.y + blockDim.y + threadIdx.y;
+	int tidX = threadIdx.x + blockIdx.x * blockDim.x;
 
 	if ((threadIdx.x >= size) || (threadIdx.y >= size))
 	{
 		return; 
 	}
 
-	for (int y=tidY; y < GRID; y+= blockDim.y)//problem 
+	for (int i=tidX; i < WINDOW; i++)
 	{
-
-		for (int x = tidX; x < GRID; x += blockDim.x)
-		{
-			if (y * 1024 < GRID)
-				temp_real_ascension[tidX] = deviceReal_ascension[tidX + x];
-				temp_real_declination[tidX] = deviceReal_declination[tidX + x];
-
-			x += WINDOW;
-		}
+		if((i * WINDOW + tidX) <= GRID)
+			temp_real_ascension[i] = deviceReal_ascension[i * WINDOW + tidX];
+			temp_real_declination[i] = deviceReal_declination[i * WINDOW + tidX];
 
 
-		__syncthreads();
+		//__syncthreads();
 
-
-
-		//for (int ii = i + 1; ii < WINDOW; ii += gridDim.x)
+		//for (int row = 0; row < WINDOW; row += blockDim.y)
 		//{
-
-		//	for (int row = 0; row < WINDOW; row += blockDim.y)
+		//	for (int col = 0; col < WINDOW; col += blockDim.x)
 		//	{
-		//		for (int col = 0; col < WINDOW; col += blockDim.x)
-		//		{
-		//			tempDD = (acosf(ClampValue(sinf(temp_real_declination[tidX + col]) * sinf(temp_real_declination[tidX + row]) + cosf(temp_real_declination[tidX + col]) * cosf(temp_real_declination[tidX + row]) * cos(temp_real_ascension[tidX + col] - temp_real_ascension[tidX + row]), -1.0f, 1.0f)) * 720.0f / (float)M_PI);
-		//			atomicAdd(deviceDD + (int)tempDD, 1);
-		//		}
+		//		tempDD = (acosf(ClampValue(sinf(temp_real_declination[threadIdx.x + col]) * sinf(temp_real_declination[threadIdx.y + row]) + cosf(temp_real_declination[threadIdx.x + col]) * cosf(temp_real_declination[threadIdx.y + row]) * cos(temp_real_ascension[threadIdx.x + col] - temp_real_ascension[threadIdx.y + row]), -1.0f, 1.0f)) * 720.0f / (float)M_PI);
+		//		atomicAdd(deviceDD + (int)tempDD, 1);
 		//	}
 		//}
-
-		y += WINDOW;
-
-		
+		//
 	}
 	__syncthreads();
 }
