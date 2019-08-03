@@ -36,9 +36,9 @@ int main(int argc, char** argv)
 		hostDR[i] = 0; 
 		scientificDifference[i] = 0; 
 	}
-
+	
 	//invoke kernel
-	KernelHandler(hostReal_ascension, hostReal_descension ,hostFlat_ascension, hostFlat_descension, hostDD, hostDR, hostRR, size, HISTOGRAM);
+	
 	bool debug = true;
 
 	if (debug)

@@ -72,7 +72,7 @@ float* CreateDeviceVector(string filename, size_t size ,bool isAscension)
 				}
 				//insert and transform the data 
 				MyFile >> temp;
-				temp = temp * 1 / 60 * (float)M_PI / 180;
+				temp = temp * 1 / 60 * (float)M_PI / 180.0f;
 								
 				if (isAscension == true)
 				{
