@@ -6,6 +6,7 @@
 #include "galaxyKernel.h"
 
 constexpr auto HISTOGRAM = 720 ;
+constexpr auto size = 100000; 
 
 using namespace std; 
 
@@ -38,8 +39,9 @@ int main(int argc, char** argv)
 	}
 	
 	//invoke kernel
-	
-	bool debug = true;
+	Kernel_handler_single(hostReal_ascension, hostReal_descension, hostDD, size); 
+
+	bool debug = false;
 
 	if (debug)
 	{

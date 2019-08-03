@@ -1,6 +1,6 @@
 #ifndef GALAXYKERNEL_H
 #define GALAXYKERNEL_H
 
-void KernelHandler(float* hostReal_ascension, float* hostReal_declination, float* hostFlat_ascension, float* hostFlat_declination, unsigned long long int* hostDD, unsigned long long int* hostDR, unsigned long long int* hostRR, size_t size, size_t histogram); 
+void Kernel_handler_single(float* host_ascension, float* host_declination, unsigned long long int* host_histogram, size_t size); 
 
 #endif
