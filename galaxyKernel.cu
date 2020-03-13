@@ -61,6 +61,16 @@ __global__ void LaunchGalaxy(float * device_ascension, float * device_declinatio
 				float temp = acosf(Clamp(__sinf(S_dec[threadIdx.x]) * __sinf(S_dec[threadIdx.x  + col]) +
 					__cosf(S_dec[threadIdx.x]) * __cosf(S_dec[threadIdx.x + col]) * __cosf(S_asc[threadIdx.x] - S_asc[threadIdx.x + col]) , -1.f, 1.f)) * 180.0f / (float)M_PI * 4.0f;
 				atomicAdd(&S_result[int(temp)], 1); 
+
+				if (blockDim.x == b % gridDim.x)
+				{
+					S_asc[threadIdx.x] = device_ascension[threadIdx.x + b * 1024];
+					S_dec[threadIdx.x] = device_declination[threadIdx.x + b * 1024];
+
+					__syncthreads();
+					
+
+				}
 			}
 
 
